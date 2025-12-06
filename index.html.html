@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Voyage Managérial d'Usbek et Rica</title>
+    <!-- Importation de la librairie cartographique Leaflet (gratuite) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { margin: 0; padding: 0; font-family: 'Arial', sans-serif; }
+        #map { height: 90vh; width: 100%; }
+        #header { height: 10vh; background-color: #2c3e50; color: white; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 20px; }
+        .custom-popup .leaflet-popup-content-wrapper { background: #f9f9f9; border-radius: 5px; }
+        .custom-popup .leaflet-popup-content { font-size: 14px; }
+        h3 { margin-top: 0; color: #d35400; }
+        .etape { font-weight: bold; color: #2c3e50; }
+        .lecon { font-style: italic; color: #555; margin-top: 5px; border-top: 1px solid #ccc; padding-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <div id="header">
+        <h2>Itinéraire des Lettres Persanes : Du Sérail à Paris</h2>
+    </div>
+    <div id="map"></div>
+
+    <script>
+        // Initialisation de la carte
+        var map = L.map('map').setView([40.0, 25.0], 4); // Centré sur la Méditerranée/Turquie
+
+        // Fond de carte (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Données du voyage (Lieux, Coordonnées, Description Pédagogique)
+        var voyage = [
+            {
+                nom: "Ispahan (Perse/Iran)",
+                coords: [32.6546, 51.6680],
+                desc: "<b>Le Siège Social</b><br>Départ d'Usbek et Rica. C'est le lieu du pouvoir traditionnel et du Sérail. <br><div class='lecon'>concept : La Zone de Confort et la Tradition.</div>"
+            },
+            {
+                nom: "Com (Qom)",
+                coords: [34.6401, 50.8764],
+                desc: "<b>L'étape Spirituelle</b><br>Usbek s'arrête pour prier sur le tombeau de la vierge qui a enfanté douze prophètes.<br><div class='lecon'>Concept : Les Valeurs Fondamentales de l'individu avant le changement.</div>"
+            },
+            {
+                nom: "Tauris (Tabriz)",
+                coords: [38.0962, 46.2738],
+                desc: "<b>La Frontière</b><br>Dernière grande ville de Perse avant l'Empire Ottoman. <br><div class='lecon'>Concept : Quitter le marché domestique connu.</div>"
+            },
+            {
+                nom: "Erzeron (Erzurum - Turquie)",
+                coords: [39.9334, 41.2769],
+                desc: "<b>Territoire Ottoman</b><br>Entrée en terre étrangère mais encore orientale. Usbek commence à douter de la gestion de son Sérail.<br><div class='lecon'>Concept : Premiers doutes stratégiques à distance.</div>"
+            },
+            {
+                nom: "Smyrne (Izmir)",
+                coords: [38.4237, 27.1428],
+                desc: "<b>Le Hub Logistique</b><br>Grand port de commerce. Ils quittent l'Asie pour s'embarquer vers l'Europe.<br><div class='lecon'>Concept : Le grand saut, le Pivot vers l'inconnu.</div>"
+            },
+            {
+                nom: "Livourne (Italie)",
+                coords: [43.5485, 10.3106],
+                desc: "<b>Le Choc Culturel (Lettre 23)</b><br>Première ville européenne. Rica est étonné par la liberté des femmes et l'architecture.<br><div class='lecon'>Concept : Découverte d'un nouveau modèle organisationnel.</div>"
+            },
+            {
+                nom: "Marseille (France)",
+                coords: [43.2965, 5.3698],
+                desc: "<b>La Porte de France</b><br>Arrivée sur le territoire cible. <br><div class='lecon'>Concept : Entrée sur le nouveau marché.</div>"
+            },
+            {
+                nom: "Paris",
+                coords: [48.8566, 2.3522],
+                desc: "<b>L'Audit Organisationnel (Lettre 24)</b><br>Destination finale. Usbek et Rica observent la frénésie parisienne, le Roi et le Pape.<br><div class='lecon'>Concept : Le Rapport d'étonnement et l'analyse critique ('Comment peut-on être Persan?').</div>"
+            }
+        ];
+
+        // Création des marqueurs et de la ligne
+        var pointList = [];
+
+        voyage.forEach(function(etape) {
+            // Ajout du marqueur
+            L.marker(etape.coords).addTo(map)
+                .bindPopup("<h3>" + etape.nom + "</h3>" + etape.desc, {className: 'custom-popup'});
+            
+            // Ajout aux points pour la ligne
+            pointList.push(etape.coords);
+        });
+
+        // Tracer la ligne entre les points
+        var path = L.polyline(pointList, {
+            color: '#d35400',
+            weight: 3,
+            opacity: 0.7,
+            dashArray: '10, 10', 
+            lineCap: 'round'
+        }).addTo(map);
+
+        // Ajuster la vue pour tout voir
+        map.fitBounds(path.getBounds(), {padding: [50, 50]});
+
+    </script>
+</body>
+</html>
